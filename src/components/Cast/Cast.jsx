@@ -1,0 +1,57 @@
+import { Loader } from 'components/Loader/Loader';
+import { getMovieCast } from 'services/apiService';
+import { BASE_IMG_URL } from 'services/constants';
+import placeholder from '../../img/placeholder.jpg';
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import toast, { Toaster } from 'react-hot-toast';
+
+const Cast = () => {
+  const [cast, setCast] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const { id } = useParams();
+
+  useEffect(() => {
+    setIsLoading(true);
+    const fetchCast = async () => {
+      try {
+        const movieCast = await getMovieCast(id);
+        setCast(movieCast);
+      } catch (error) {
+        console.error(error);
+        toast.error(`${error.message}! Please try again! :(`);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchCast();
+  }, [id]);
+
+  return (
+    <>
+      <h2>Cast</h2>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <ul>
+          {cast.map(({ order, profile_path, name, character }) => (
+            <li key={order}>
+              <img
+                src={profile_path ? BASE_IMG_URL + profile_path : placeholder}
+                alt={name}
+              />
+              <p>
+                {name}
+                {character && <span>as {character}</span>}
+              </p>
+            </li>
+          ))}
+        </ul>
+      )}
+      <Toaster />
+    </>
+  );
+};
+
+export default Cast;
