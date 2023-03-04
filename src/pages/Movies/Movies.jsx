@@ -4,6 +4,8 @@ import { getMoviesByQuery } from 'services/apiService';
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
+import { Heading } from 'components/App.styled';
+import { SearchForm, SearchInput, SearchButton } from './Movies.styled';
 
 const Movies = () => {
   const [query, setQuery] = useState('');
@@ -63,11 +65,16 @@ const Movies = () => {
 
   return (
     <>
-      <h1>Movies</h1>
-      <form onSubmit={handleSubmit}>
-        <input type="text" name="query" value={query} onChange={handleChange} />
-        <button type="submit">Search</button>
-      </form>
+      <Heading>Movies</Heading>
+      <SearchForm onSubmit={handleSubmit}>
+        <SearchInput
+          type="text"
+          name="query"
+          value={query}
+          onChange={handleChange}
+        />
+        <SearchButton type="submit">Search</SearchButton>
+      </SearchForm>
       {isLoading && <Loader />}
       <MoviesList movies={movies} />
       <Toaster />

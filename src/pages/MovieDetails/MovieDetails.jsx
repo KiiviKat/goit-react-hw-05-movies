@@ -3,14 +3,18 @@ import { getMovieDetails } from 'services/apiService';
 import { BASE_IMG_URL } from 'services/constants';
 import placeholder from '../../img/placeholder.jpg';
 import { useState, useEffect } from 'react';
-import {
-  useParams,
-  useNavigate,
-  useLocation,
-  Outlet,
-  Link,
-} from 'react-router-dom';
+import { useParams, useNavigate, useLocation, Outlet } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
+import { Heading } from 'components/App.styled';
+import {
+  GoBackBtn,
+  Details,
+  DetailsText,
+  Highlight,
+  Rating,
+  DetailsButtons,
+  Link,
+} from './MovieDetails.styled';
 
 const MovieDetails = () => {
   const [details, setDetails] = useState(null);
@@ -51,8 +55,6 @@ const MovieDetails = () => {
     release_date,
     status,
     runtime,
-    budget,
-    revenue,
   } = details;
 
   return (
@@ -61,12 +63,11 @@ const MovieDetails = () => {
         <Loader />
       ) : (
         <>
-          <h1>{title}</h1>
-          <div>
-            <button type="button" onClick={handleGoBack}>
-              Go back
-            </button>
-
+          <Heading>{title}</Heading>
+          <GoBackBtn type="button" onClick={handleGoBack}>
+            Go back
+          </GoBackBtn>
+          <Details>
             <img
               src={poster_path ? BASE_IMG_URL + poster_path : placeholder}
               alt={title}
@@ -75,70 +76,40 @@ const MovieDetails = () => {
             <div>
               <ul>
                 <li>
-                  <p>
-                    <span>Overview:</span> {overview}
-                  </p>
+                  <DetailsText>
+                    <Highlight>Overview:</Highlight> {overview}
+                  </DetailsText>
                 </li>
                 <li>
-                  <p>
-                    <span>Status:</span> {status}
-                  </p>
-                  <p>
-                    <span>Runtime:</span> {runtime} minutes
-                  </p>
-                  {!!budget && (
-                    <p>
-                      <span>Budget:</span>{' '}
-                      {budget
-                        .toString()
-                        .split('')
-                        .map((symbol, i, a) =>
-                          !((a.length - (i + 1)) % 3) && i + 1 !== a.length
-                            ? symbol + ','
-                            : symbol
-                        )
-                        .join('')}
-                      $
-                    </p>
-                  )}
-                  {!!revenue && (
-                    <p>
-                      <span>Revenue:</span>{' '}
-                      {revenue
-                        .toString()
-                        .split('')
-                        .map((symbol, i, a) =>
-                          !((a.length - (i + 1)) % 3) && i + 1 !== a.length
-                            ? symbol + ','
-                            : symbol
-                        )
-                        .join('')}
-                      $
-                    </p>
-                  )}
-                  <p>
-                    <span>Release date:</span>{' '}
+                  <DetailsText>
+                    <Highlight>Status:</Highlight> {status}
+                  </DetailsText>
+                  <DetailsText>
+                    <Highlight>Release date:</Highlight>{' '}
                     {new Date(release_date).toLocaleString().slice(0, 10)}
-                  </p>
+                  </DetailsText>
+                  <DetailsText>
+                    <Highlight>Runtime:</Highlight> {runtime} minutes
+                  </DetailsText>
                 </li>
                 <li>
-                  <p>
-                    <span>Rating:</span> <span>{vote_average}</span> based on{' '}
-                    {vote_count} votes
-                  </p>
+                  <DetailsText>
+                    <Highlight>Rating:</Highlight>{' '}
+                    <Rating>{vote_average}</Rating> based on {vote_count} votes
+                  </DetailsText>
                 </li>
               </ul>
 
-              <div>
+              <DetailsButtons>
                 <Link to="cast" state={{ from: location.state.from }}>
                   Cast
                 </Link>
                 <Link to="reviews" state={{ from: location.state.from }}>
                   Reviews
                 </Link>
-              </div>
+              </DetailsButtons>
             </div>
-          </div>
+          </Details>
         </>
       )}
       <Outlet />

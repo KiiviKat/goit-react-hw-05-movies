@@ -4,6 +4,17 @@ import { BASE_IMG_URL } from 'services/constants';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
+import { Heading } from 'components/App.styled';
+import {
+  ReviewList,
+  Review,
+  Author,
+  About,
+  Avatar,
+  Name,
+  ReviewDate,
+  Text,
+} from './Reviews.styled';
 
 const Reviews = () => {
   const [reviews, setReviews] = useState([]);
@@ -18,7 +29,7 @@ const Reviews = () => {
         setReviews(movieReviews);
       } catch (error) {
         console.error(error);
-        toast.error(`Oh boy, it's ${error.message}! Please try again!`);
+        toast.error(`${error.message}! Please try again! :(`);
       } finally {
         setIsLoading(false);
       }
@@ -29,11 +40,11 @@ const Reviews = () => {
 
   return (
     <>
-      <h2>Reviews</h2>
+      <Heading as="h2">Reviews</Heading>
       {isLoading ? (
         <Loader />
       ) : !!reviews.length ? (
-        <ul>
+        <ReviewList>
           {reviews.map(
             ({
               id,
@@ -48,9 +59,9 @@ const Reviews = () => {
               }
 
               return (
-                <li key={id}>
-                  <div>
-                    <img
+                <Review key={id}>
+                  <Author>
+                    <Avatar
                       src={
                         avatar_path.includes('https')
                           ? avatar_path.slice(1)
@@ -58,19 +69,21 @@ const Reviews = () => {
                       }
                       alt={`${author}'s avatar`}
                     />
-                    <div>
-                      <h3>{author}</h3>
-                      <span>{new Date(created_at).toLocaleString()}</span>
-                    </div>
-                  </div>
-                  <span>{content}</span>
-                </li>
+                    <About>
+                      <Name>{author}</Name>
+                      <ReviewDate>
+                        {new Date(created_at).toLocaleString()}
+                      </ReviewDate>
+                    </About>
+                  </Author>
+                  <Text>{content}</Text>
+                </Review>
               );
             }
           )}
-        </ul>
+        </ReviewList>
       ) : (
-        <p>No reviews!</p>
+        <Heading as="h3">No reviews...</Heading>
       )}
       <Toaster />
     </>

@@ -5,6 +5,8 @@ import placeholder from '../../img/placeholder.jpg';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
+import { Heading } from 'components/App.styled';
+import { CastList, CastPic, CastName, CastCharacter } from './Cast.styled';
 
 const Cast = () => {
   const [cast, setCast] = useState([]);
@@ -30,24 +32,24 @@ const Cast = () => {
 
   return (
     <>
-      <h2>Cast</h2>
+      <Heading as="h2">Cast</Heading>
       {isLoading ? (
         <Loader />
       ) : (
-        <ul>
+        <CastList>
           {cast.map(({ order, profile_path, name, character }) => (
             <li key={order}>
-              <img
+              <CastPic
                 src={profile_path ? BASE_IMG_URL + profile_path : placeholder}
                 alt={name}
               />
-              <p>
+              <CastName>
                 {name}
-                {character && <span>as {character}</span>}
-              </p>
+                {character && <CastCharacter>as {character}</CastCharacter>}
+              </CastName>
             </li>
           ))}
-        </ul>
+        </CastList>
       )}
       <Toaster />
     </>

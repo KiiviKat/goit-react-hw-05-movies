@@ -2,6 +2,7 @@ import { MoviesList } from 'components/MoviesList/MoviesList';
 import { getTrendingMovies } from 'services/apiService';
 import { useState, useEffect } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
+import { Heading } from 'components/App.styled';
 
 const Home = () => {
   const [movies, setMovies] = useState([]);
@@ -22,7 +23,7 @@ const Home = () => {
 
   return (
     <>
-      <h1>Trending today</h1>
+      <Heading>Trending today</Heading>
       <MoviesList movies={movies} />
       <Toaster />
     </>
